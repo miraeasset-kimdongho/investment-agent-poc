@@ -1,47 +1,104 @@
+/* ===== 디자인 토큰 ===== */
+:root {
+  --color-bg:           #F5F7FA;
+  --color-surface:      #FFFFFF;
+  --color-primary:      #1A56DB;
+  --color-primary-light:#EBF5FF;
+  --color-accent:       #0E9F6E;
+  --color-text-strong:  #111928;
+  --color-text-body:    #4B5563;
+  --color-text-muted:   #9CA3AF;
+  --color-border:       #E5E7EB;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  --radius-card: 24px;
+  --radius-btn:  16px;
+  --radius-badge: 8px;
+  --shadow-card: 0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+}
+
+/* ===== 카드 ===== */
 .card {
-  background: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-  padding: 48px 40px;
-  max-width: 520px;
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 56px 48px 48px;
+  max-width: 480px;
   width: 90%;
   text-align: center;
 }
 
-.greeting-title {
-  font-size: 2rem;
+/* ===== 아이콘 ===== */
+.card-icon {
+  width: 64px;
+  height: 64px;
+  background: var(--color-primary-light);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 28px;
+  font-size: 32px;
+}
+
+/* ===== 인사 메시지 ===== */
+.greeting {
+  margin-bottom: 32px;
+}
+
+.greeting-line {
+  font-size: 1.75rem;
   font-weight: 800;
-  color: #1a202c;
-  margin-bottom: 12px;
+  color: var(--color-text-strong);
   line-height: 1.4;
+  letter-spacing: -0.02em;
 }
 
 .uid-badge {
   display: inline-block;
-  background: #ebf8ff;
-  color: #2b6cb0;
-  border-radius: 8px;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  border-radius: var(--radius-badge);
   padding: 2px 10px;
-  font-size: 1.1rem;
-  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
   vertical-align: middle;
+  margin-right: 4px;
 }
 
 .greeting-message {
-  color: #2d6a4f;
+  color: var(--color-accent);
 }
 
 .subtitle {
-  color: #718096;
-  font-size: 1rem;
-  margin-bottom: 32px;
+  margin-top: 10px;
+  font-size: 0.95rem;
+  color: var(--color-text-body);
 }
 
+/* ===== 구분선 ===== */
+.divider {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 0 0 28px;
+}
+
+/* ===== 반응 섹션 ===== */
+.reaction-section-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 16px;
+}
+
+/* ===== 반응 그리드 ===== */
 .reaction-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin-bottom: 28px;
+  gap: 12px;
+  margin-bottom: 24px;
 }
 
 .reaction-btn {
@@ -49,25 +106,26 @@
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  background: #f7fafc;
-  border: 2px solid #e2e8f0;
-  border-radius: 14px;
-  padding: 16px 8px;
+  background: #F9FAFB;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-btn);
+  padding: 18px 8px;
   cursor: pointer;
-  transition: all 0.18s ease;
+  transition: all 0.16s ease;
   font-family: inherit;
 }
 
 .reaction-btn:hover:not(:disabled) {
-  background: #ebf8ff;
-  border-color: #90cdf4;
+  background: var(--color-primary-light);
+  border-color: #93C5FD;
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(26, 86, 219, 0.12);
 }
 
 .reaction-btn.selected {
-  background: #ebf8ff;
-  border-color: #3182ce;
-  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.25);
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.15);
 }
 
 .reaction-btn:disabled {
@@ -76,18 +134,19 @@
 }
 
 .reaction-emoji {
-  font-size: 2rem;
+  font-size: 1.9rem;
   line-height: 1;
 }
 
 .reaction-label {
-  font-size: 0.78rem;
-  color: #4a5568;
+  font-size: 0.75rem;
   font-weight: 600;
+  color: var(--color-text-body);
 }
 
+/* ===== 피드백 ===== */
 .feedback {
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   font-weight: 600;
   padding: 10px 16px;
   border-radius: 10px;
@@ -95,29 +154,32 @@
 }
 
 .feedback--ok {
-  background: #f0fff4;
-  color: #276749;
-  border: 1px solid #9ae6b4;
+  background: #ECFDF5;
+  color: #065F46;
+  border: 1px solid #6EE7B7;
 }
 
 .feedback--error {
-  background: #fff5f5;
-  color: #c53030;
-  border: 1px solid #feb2b2;
+  background: #FEF2F2;
+  color: #991B1B;
+  border: 1px solid #FCA5A5;
 }
 
+/* ===== UID 푸터 ===== */
 .uid-footer {
-  font-size: 0.72rem;
-  color: #cbd5e0;
-  font-family: 'Courier New', monospace;
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
   word-break: break-all;
+  margin-top: 8px;
 }
 
+/* ===== 로딩/에러 ===== */
 .spinner {
   width: 42px;
   height: 42px;
-  border: 4px solid #e2e8f0;
-  border-top-color: #3182ce;
+  border: 4px solid var(--color-border);
+  border-top-color: var(--color-primary);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   margin: 0 auto 16px;
@@ -127,11 +189,5 @@
   to { transform: rotate(360deg); }
 }
 
-.status-text {
-  color: #718096;
-}
-
-.error-text {
-  color: #c53030;
-  font-weight: 600;
-}
+.status-text { color: var(--color-text-body); }
+.error-text  { color: #991B1B; font-weight: 600; }

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>[시안] Bicycle Outer Cycle - 인사 페이지</title>
+  <style>
+    /* ===== 디자인 토큰 ===== */
+    :root {
+      /* 색상 */
+      --color-bg:           #F5F7FA;
+      --color-surface:      #FFFFFF;
+      --color-primary:      #1A56DB;
+      --color-primary-light:#EBF5FF;
+      --color-accent:       #0E9F6E;
+      --color-text-strong:  #111928;
+      --color-text-body:    #4B5563;
+      --color-text-muted:   #9CA3AF;
+      --color-border:       #E5E7EB;
+      --color-selected-ring:#1A56DB;
+
+      /* 반응 버튼 상태 */
+      --color-btn-bg:       #F9FAFB;
+      --color-btn-hover:    #EBF5FF;
+      --color-btn-selected: #EBF5FF;
+
+      /* 타이포그래피 */
+      --font-sans: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+      --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+      /* 간격 */
+      --radius-card: 24px;
+      --radius-btn:  16px;
+      --radius-badge: 8px;
+      --shadow-card: 0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      padding: 32px 16px;
+    }
+
+    /* ===== 카드 ===== */
+    .card {
+      background: var(--color-surface);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      padding: 56px 48px 48px;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* ===== 아이콘 영역 ===== */
+    .card-icon {
+      width: 64px;
+      height: 64px;
+      background: var(--color-primary-light);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 28px;
+      font-size: 32px;
+    }
+
+    /* ===== 인사 메시지 ===== */
+    .greeting {
+      margin-bottom: 32px;
+    }
+
+    .greeting-line {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--color-text-strong);
+      line-height: 1.4;
+      letter-spacing: -0.02em;
+    }
+
+    .uid-badge {
+      display: inline-block;
+      background: var(--color-primary-light);
+      color: var(--color-primary);
+      border-radius: var(--radius-badge);
+      padding: 2px 10px;
+      font-size: 1rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+
+    .greeting-text {
+      color: var(--color-accent);
+    }
+
+    .greeting-sub {
+      margin-top: 10px;
+      font-size: 0.95rem;
+      color: var(--color-text-body);
+    }
+
+    /* ===== 구분선 ===== */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--color-border);
+      margin: 0 0 28px;
+    }
+
+    /* ===== 반응 레이블 ===== */
+    .reaction-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 16px;
+    }
+
+    /* ===== 반응 그리드 ===== */
+    .reaction-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .reaction-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      background: var(--color-btn-bg);
+      border: 1.5px solid var(--color-border);
+      border-radius: var(--radius-btn);
+      padding: 18px 8px;
+      cursor: pointer;
+      transition: all 0.16s ease;
+      font-family: var(--font-sans);
+    }
+
+    .reaction-btn:hover {
+      background: var(--color-btn-hover);
+      border-color: #93C5FD;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(26,86,219,0.12);
+    }
+
+    .reaction-btn.selected {
+      background: var(--color-btn-selected);
+      border-color: var(--color-selected-ring);
+      box-shadow: 0 0 0 3px rgba(26,86,219,0.15);
+    }
+
+    .reaction-emoji { font-size: 1.9rem; line-height: 1; }
+    .reaction-name  { font-size: 0.75rem; font-weight: 600; color: var(--color-text-body); }
+
+    /* ===== 저장 완료 피드백 ===== */
+    .feedback {
+      background: #ECFDF5;
+      border: 1px solid #6EE7B7;
+      color: #065F46;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border-radius: 10px;
+      padding: 10px 16px;
+      margin-bottom: 20px;
+    }
+
+    /* ===== UID 푸터 ===== */
+    .uid-footer {
+      font-size: 0.7rem;
+      color: var(--color-text-muted);
+      font-family: var(--font-mono);
+      word-break: break-all;
+      margin-top: 8px;
+    }
+
+    /* ===== 토큰 주석 패널 (시안용) ===== */
+    .token-panel {
+      background: #1E2433;
+      color: #E2E8F0;
+      border-radius: 16px;
+      padding: 28px 32px;
+      max-width: 480px;
+      width: 100%;
+      text-align: left;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+    }
+
+    .token-panel h2 {
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #94A3B8;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+    }
+
+    .token-row { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+    .token-key { color: #7DD3FC; }
+    .token-val { color: #A5F3FC; }
+    .token-swatch {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      margin-right: 6px;
+      vertical-align: middle;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== 메인 카드 ===== -->
+  <div class="card">
+
+    <div class="card-icon">🩳</div>
+
+    <div class="greeting">
+      <div class="greeting-line">
+        <span class="uid-badge">A3F92C1D</span>님<br>
+        <span class="greeting-text">안녕하세요!</span>
+      </div>
+      <p class="greeting-sub">오늘 기분이 어떠신가요?</p>
+    </div>
+
+    <hr class="divider" />
+
+    <p class="reaction-label">반응 남기기</p>
+
+    <div class="reaction-grid">
+      <button class="reaction-btn selected">
+        <span class="reaction-emoji">👍</span>
+        <span class="reaction-name">좋아요</span>
+      </button>
+      <button class="reaction-btn">
+        <span class="reaction-emoji">❤️</span>
+        <span class="reaction-name">사랑해요</span>
+      </button>
+      <button class="reaction-btn">
+        <span class="reaction-emoji">😮</span>
+        <span class="reaction-name">놀라워요</span>
+      </button>
+      <button class="reaction-btn">
+        <span class="reaction-emoji">😂</span>
+        <span class="reaction-name">웃겨요</span>
+      </button>
+      <button class="reaction-btn">
+        <span class="reaction-emoji">😢</span>
+        <span class="reaction-name">슬퍼요</span>
+      </button>
+      <button class="reaction-btn">
+        <span class="reaction-emoji">😠</span>
+        <span class="reaction-name">화나요</span>
+      </button>
+    </div>
+
+    <div class="feedback">✅ 반응이 저장되었습니다!</div>
+
+    <p class="uid-footer">UID: a3f92c1d-e5b7-4a12-8f63-2d91c047e8fa</p>
+
+  </div>
+
+  <!-- ===== 디자인 토큰 패널 (검토용) ===== -->
+  <div class="token-panel">
+    <h2>디자인 토큰 (검토용)</h2>
+    <div class="token-row">
+      <span class="token-key">--color-primary</span>
+      <span class="token-val"><span class="token-swatch" style="background:#1A56DB"></span>#1A56DB</span>
+    </div>
+    <div class="token-row">
+      <span class="token-key">--color-accent</span>
+      <span class="token-val"><span class="token-swatch" style="background:#0E9F6E"></span>#0E9F6E (인사 텍스트)</span>
+    </div>
+    <div class="token-row">
+      <span class="token-key">--color-bg</span>
+      <span class="token-val"><span class="token-swatch" style="background:#F5F7FA"></span>#F5F7FA</span>
+    </div>
+    <div class="token-row">
+      <span class="token-key">--color-surface</span>
+      <span class="token-val"><span class="token-swatch" style="background:#FFFFFF; border:1px solid #ddd"></span>#FFFFFF</span>
+    </div>
+    <div class="token-row">
+      <span class="token-key">--radius-card</span>
+      <span class="token-val">24px</span>
+    </div>
+    <div class="token-row">
+      <span class="token-key">--radius-btn</span>
+      <span class="token-val">16px</span>
+    </div>
+    <div class="token-row">
+      <span class="token-key">font-size (greeting)</span>
+      <span class="token-val">1.75rem / 800</span>
+    </div>
+  </div>
+
+</body>
+</html>
