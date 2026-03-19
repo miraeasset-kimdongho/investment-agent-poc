@@ -1,0 +1,137 @@
+.card {
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  padding: 48px 40px;
+  max-width: 520px;
+  width: 90%;
+  text-align: center;
+}
+
+.greeting-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1a202c;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.uid-badge {
+  display: inline-block;
+  background: #ebf8ff;
+  color: #2b6cb0;
+  border-radius: 8px;
+  padding: 2px 10px;
+  font-size: 1.1rem;
+  font-family: 'Courier New', monospace;
+  vertical-align: middle;
+}
+
+.greeting-message {
+  color: #2d6a4f;
+}
+
+.subtitle {
+  color: #718096;
+  font-size: 1rem;
+  margin-bottom: 32px;
+}
+
+.reaction-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.reaction-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: #f7fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 16px 8px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  font-family: inherit;
+}
+
+.reaction-btn:hover:not(:disabled) {
+  background: #ebf8ff;
+  border-color: #90cdf4;
+  transform: translateY(-2px);
+}
+
+.reaction-btn.selected {
+  background: #ebf8ff;
+  border-color: #3182ce;
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.25);
+}
+
+.reaction-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.reaction-emoji {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.reaction-label {
+  font-size: 0.78rem;
+  color: #4a5568;
+  font-weight: 600;
+}
+
+.feedback {
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.feedback--ok {
+  background: #f0fff4;
+  color: #276749;
+  border: 1px solid #9ae6b4;
+}
+
+.feedback--error {
+  background: #fff5f5;
+  color: #c53030;
+  border: 1px solid #feb2b2;
+}
+
+.uid-footer {
+  font-size: 0.72rem;
+  color: #cbd5e0;
+  font-family: 'Courier New', monospace;
+  word-break: break-all;
+}
+
+.spinner {
+  width: 42px;
+  height: 42px;
+  border: 4px solid #e2e8f0;
+  border-top-color: #3182ce;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.status-text {
+  color: #718096;
+}
+
+.error-text {
+  color: #c53030;
+  font-weight: 600;
+}
