@@ -48,11 +48,25 @@ def init_db():
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS user_reactions (
                     id SERIAL PRIMARY KEY,
-                    user_uid TEXT NOT NULL UNIQUE,
+                    user_uid TEXT NOT NULL,
                     reaction TEXT NOT NULL,
-                    created_at TIMESTAMPTZ DEFAULT NOW(),
-                    updated_at TIMESTAMPTZ DEFAULT NOW()
+                    created_at TIMESTAMPTZ DEFAULT NOW()
                 );
+            """)
+            # 기존 UNIQUE(user_uid) 제약 제거 (이력 누적을 위해)
+            cur.execute("""
+                DO $$
+                DECLARE
+                    constraint_name TEXT;
+                BEGIN
+                    SELECT conname INTO constraint_name
+                    FROM pg_constraint
+                    WHERE conrelid = 'user_reactions'::regclass
+                      AND contype = 'u';
+                    IF constraint_name IS NOT NULL THEN
+                        EXECUTE 'ALTER TABLE user_reactions DROP CONSTRAINT ' || constraint_name;
+                    END IF;
+                END $$;
             """)
             conn.commit()
 
@@ -89,7 +103,7 @@ def get_greeting():
     try:
         with get_conn() as conn:
             with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-                cur.execute("SELECT id, message FROM greetings ORDER BY id LIMIT 1;")
+                cur.execute("SELECT id, message FROM greetings ORDER BY RANDOM() LIMIT 1;")
                 row = cur.fetchone()
                 if not row:
                     raise HTTPException(status_code=404, detail="No greeting found")
@@ -115,11 +129,9 @@ def upsert_reaction(user_uid: str, body: ReactionRequest):
         with get_conn() as conn:
             with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
                 cur.execute("""
-                    INSERT INTO user_reactions (user_uid, reaction, updated_at)
-                    VALUES (%s, %s, NOW())
-                    ON CONFLICT (user_uid)
-                    DO UPDATE SET reaction = EXCLUDED.reaction, updated_at = NOW()
-                    RETURNING id, user_uid, reaction, created_at, updated_at;
+                    INSERT INTO user_reactions (user_uid, reaction)
+                    VALUES (%s, %s)
+                    RETURNING id, user_uid, reaction, created_at;
                 """, (user_uid, body.reaction))
                 row = cur.fetchone()
                 conn.commit()
@@ -128,7 +140,6 @@ def upsert_reaction(user_uid: str, body: ReactionRequest):
                     "user_uid": row["user_uid"],
                     "reaction": row["reaction"],
                     "created_at": row["created_at"].isoformat(),
-                    "updated_at": row["updated_at"].isoformat(),
                 }
     except psycopg2.Error as e:
         raise HTTPException(status_code=500, detail=f"DB error: {e}")
@@ -211,7 +222,7 @@ def get_reaction(user_uid: str):
         with get_conn() as conn:
             with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
                 cur.execute(
-                    "SELECT id, user_uid, reaction, created_at, updated_at FROM user_reactions WHERE user_uid = %s;",
+                    "SELECT id, user_uid, reaction, created_at FROM user_reactions WHERE user_uid = %s ORDER BY created_at DESC LIMIT 1;",
                     (user_uid,)
                 )
                 row = cur.fetchone()
@@ -222,7 +233,6 @@ def get_reaction(user_uid: str):
                     "user_uid": row["user_uid"],
                     "reaction": row["reaction"],
                     "created_at": row["created_at"].isoformat(),
-                    "updated_at": row["updated_at"].isoformat(),
                 }
     except psycopg2.Error as e:
         raise HTTPException(status_code=500, detail=f"DB error: {e}")
