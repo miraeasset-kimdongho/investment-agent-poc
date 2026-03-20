@@ -166,6 +166,26 @@
 }
 
 /* ===== UID 푸터 ===== */
+.history {
+  margin-bottom: 12px;
+}
+.history-label {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-bottom: 6px;
+}
+.history-list {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+.history-item {
+  font-size: 1.4rem;
+  background: var(--color-bg);
+  border-radius: 8px;
+  padding: 4px 8px;
+}
+
 .uid-footer {
   font-size: 0.7rem;
   color: var(--color-text-muted);
