@@ -118,7 +118,7 @@ def upsert_reaction(user_uid: str, body: ReactionRequest):
     if not user_uid or len(user_uid) > 255:
         raise HTTPException(status_code=400, detail="Invalid user_uid")
 
-    allowed_reactions = {"like", "love", "wow", "haha", "sad", "angry"}
+    allowed_reactions = {"like", "love", "wow", "haha", "sad", "angry", "clap", "fire", "thumbsdown"}
     if body.reaction not in allowed_reactions:
         raise HTTPException(
             status_code=400,
@@ -222,17 +222,19 @@ def get_reaction(user_uid: str):
         with get_conn() as conn:
             with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
                 cur.execute(
-                    "SELECT id, user_uid, reaction, created_at FROM user_reactions WHERE user_uid = %s ORDER BY created_at DESC LIMIT 1;",
+                    "SELECT id, user_uid, reaction, created_at FROM user_reactions WHERE user_uid = %s ORDER BY created_at DESC LIMIT 3;",
                     (user_uid,)
                 )
-                row = cur.fetchone()
-                if not row:
-                    return {"user_uid": user_uid, "reaction": None}
+                rows = cur.fetchall()
+                if not rows:
+                    return {"user_uid": user_uid, "reaction": None, "history": []}
                 return {
-                    "id": row["id"],
-                    "user_uid": row["user_uid"],
-                    "reaction": row["reaction"],
-                    "created_at": row["created_at"].isoformat(),
+                    "user_uid": user_uid,
+                    "reaction": rows[0]["reaction"],
+                    "history": [
+                        {"reaction": r["reaction"], "created_at": r["created_at"].isoformat()}
+                        for r in rows
+                    ],
                 }
     except psycopg2.Error as e:
         raise HTTPException(status_code=500, detail=f"DB error: {e}")
